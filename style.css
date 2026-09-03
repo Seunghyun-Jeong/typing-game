@@ -1,0 +1,229 @@
+/* ---------- 색·간격 토큰 ---------- */
+:root {
+  --bg: #0f1115;
+  --surface: #191d24;
+  --surface-2: #222831;
+  --line: #2e353f;
+  --text: #e8edf3;
+  --muted: #98a2b0;
+  --accent: #4f8cff;
+  --ok: #35c88a;
+  --bad: #ff5d6c;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  line-height: 1.6;
+}
+
+/* 화면에는 안 보이지만 스크린리더는 읽는 텍스트 */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- 카드 ---------- */
+.game {
+  width: 100%;
+  max-width: 480px;
+  padding: 28px 24px 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+
+.game__head h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.game__desc {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.game__desc strong { color: var(--text); }
+
+/* ---------- 남은 시간 막대 ---------- */
+.timer {
+  height: 6px;
+  margin-bottom: 20px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.timer__bar {
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.25s linear, background-color 0.3s;
+}
+
+/* 시간이 얼마 안 남으면 빨갛게 */
+.timer__bar.is-low { background: var(--bad); }
+
+/* ---------- 타겟 문자 ---------- */
+.target {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  margin-bottom: 18px;
+  background: var(--surface-2);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 76px;
+  font-weight: 700;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.target__idle {
+  font-size: 15px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--muted);
+}
+
+/* 정답·오답 피드백 */
+.target.is-ok  { border-color: var(--ok);  background: rgba(53, 200, 138, 0.12); }
+.target.is-bad { border-color: var(--bad); background: rgba(255, 93, 108, 0.12); animation: shake 0.25s; }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-7px); }
+  75%      { transform: translateX(7px); }
+}
+
+/* 애니메이션을 원치 않는 사용자 설정 존중 */
+@media (prefers-reduced-motion: reduce) {
+  .target.is-bad { animation: none; }
+  .timer__bar { transition: none; }
+}
+
+/* 입력을 받는 숨은 칸 — 화면에서만 감춘다 */
+.catcher {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  border: 0;
+  padding: 0;
+}
+
+.hint {
+  margin: -8px 0 12px;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+/* ---------- 점수판 ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  padding: 10px 4px;
+  background: var(--surface-2);
+  border-radius: 10px;
+}
+
+.stat__label {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.stat__value {
+  font-size: 19px;
+  font-variant-numeric: tabular-nums; /* 숫자 폭을 고정해 값이 바뀌어도 안 흔들리게 */
+}
+
+/* ---------- 버튼 ---------- */
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s, opacity 0.15s;
+}
+
+.btn:hover:not(:disabled) { background: #2b323d; }
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #0f1115;
+}
+
+.btn--primary:hover:not(:disabled) { background: #6b9fff; }
+
+/* 키보드 포커스를 항상 보이게 */
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- 결과 ---------- */
+.result {
+  margin-top: 18px;
+  padding: 16px;
+  background: var(--surface-2);
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.result__score {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.result__new { color: var(--ok); font-weight: 600; }
+
+/* ---------- 좁은 화면 ---------- */
+@media (max-width: 420px) {
+  .game { padding: 22px 16px 18px; }
+  .target { height: 120px; font-size: 60px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}

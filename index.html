@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>타자 연습 게임</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="game" id="game">
+  <header class="game__head">
+    <h1>타자 연습</h1>
+    <p class="game__desc">화면에 나온 문자를 입력하세요. 대소문자는 <strong>구분하지 않습니다</strong>.</p>
+  </header>
+
+  <!-- 남은 시간 막대 -->
+  <div class="timer">
+    <div class="timer__bar" id="timerBar"></div>
+  </div>
+
+  <!-- 타겟 문자 -->
+  <section class="target" id="target" aria-live="polite" aria-label="입력할 문자">
+    <span class="target__idle">Start를 눌러 시작하세요</span>
+  </section>
+
+  <!-- 모바일 키보드를 띄우고 입력을 받는 숨은 칸 -->
+  <label class="sr-only" for="catcher">문자 입력</label>
+  <input id="catcher" class="catcher" type="text" autocomplete="off"
+         autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text">
+
+  <p class="hint" id="hint" hidden>화면을 클릭한 뒤 입력하세요</p>
+
+  <!-- 점수판 -->
+  <section class="stats">
+    <div class="stat">
+      <span class="stat__label">점수</span>
+      <strong class="stat__value" id="score" aria-live="polite">0</strong>
+    </div>
+    <div class="stat">
+      <span class="stat__label">연속</span>
+      <strong class="stat__value" id="combo">0</strong>
+    </div>
+    <div class="stat">
+      <span class="stat__label">남은 시간</span>
+      <strong class="stat__value" id="time">20</strong>
+    </div>
+    <div class="stat">
+      <span class="stat__label">최고 기록</span>
+      <strong class="stat__value" id="best">0</strong>
+    </div>
+  </section>
+
+  <div class="controls">
+    <button type="button" class="btn btn--primary" id="startBtn">Start</button>
+    <button type="button" class="btn" id="resetBtn">Reset</button>
+  </div>
+
+  <!-- 게임 종료 결과 -->
+  <section class="result" id="result" hidden aria-live="polite"></section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
